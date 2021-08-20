@@ -1,28 +1,19 @@
-const contacts = require('../../model/contacts.json');
+const createError = require('http-errors');
+const {contacts: service} = require('../../services');
 
-const updateContact = (req, res) => {
+const updateContact = async (req, res, next) => {
   const {contactId} = req.params;
-  const {body} = req;
-
-  const index = contacts.findIndex(
-    contact => contact.id.toString() === contactId
-  );
-  if (index === -1) {
-    return res.status(404).json({
-      status: 'error',
-      code: 404,
-      message: 'Not found'
-    });
+  const result = await service.updateById(contactId, req.body);
+  if (!result) {
+    const error = createError(404, `Contact with id = ${contactId} not found`);
+    throw error;
   }
-  const updateContact = {...req.body, id: contactId};
-  contacts[index] = updateContact;
   res.json({
     status: 'success',
     code: 200,
     data: {
-      result: updateContact
+      result
     }
   });
 };
-
 module.exports = updateContact;
