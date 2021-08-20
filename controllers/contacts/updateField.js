@@ -1,17 +1,16 @@
 const createError = require('http-errors');
 const {contacts: service} = require('../../services');
 
-const getContactById = async (req, res, next) => {
+const updateField = async (req, res, next) => {
   const {contactId} = req.params;
-  const result = await service.getById(contactId);
+  const result = await service.updateStatusContact(contactId, req.body);
+  if (!req.body) {
+    const error = createError(400, 'missing field favorite');
+    throw error;
+  }
   if (!result) {
     const error = createError(404, `Contact with id = ${contactId} not found`);
     throw error;
-    // return res.status(404).json({
-    //   status: 'error',
-    //   code: 404,
-    //   message: `Contact with id = ${contactId} not found`
-    // });
   }
   res.json({
     status: 'success',
@@ -21,4 +20,5 @@ const getContactById = async (req, res, next) => {
     }
   });
 };
-module.exports = getContactById;
+
+module.exports = updateField;
