@@ -3,13 +3,12 @@ const logger = require('morgan');
 const cors = require('cors');
 const api = require('./routes/api');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config(); // чтобы из env данные попали в переменные окружения
 
 const app = express(); //создание app (наш сервер)
 
 const {DB_HOST, PORT = 3000} = process.env;
 // const PORT = process.env.PORT || 3000;
-console.log(process.env.DB_HOST);
 
 mongoose
   .connect(DB_HOST, {
@@ -30,15 +29,16 @@ app.use(logger(formatsLogger));
 app.use(cors()); //разрешает кросс-доменные запросы
 app.use(express.json()); //мидлвара для парсинга из json в объект
 
-app.use('/api/contacts', api.contacts);
+app.use('/api/contacts', api.contacts); //обработчик маршрута contacts
+app.use('/api/users', api.users); //обработчик маршрута users
 
-// app.use((req, res) => {
-//   res.status(404).json({status: 'error', code: 404, message: 'Not found'});
-// });
+app.use((_, res) => {
+  res.status(404).send({status: 'error', code: 404, message: 'Not found'});
+});
 
-app.use((error, req, res, next) => {
-  const {statusCode: code = 500, message = 'Server error'} = error;
-  res.status(code).json({status: 'error', code, message});
+app.use((error, _, res, __) => {
+  const {status = 500, message = 'Server error'} = error;
+  res.status(status).json({status: 'error', code: status, message});
 });
 
 module.exports = app;
