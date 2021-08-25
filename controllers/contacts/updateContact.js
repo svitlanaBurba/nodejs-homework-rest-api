@@ -3,7 +3,8 @@ const {contacts: service} = require('../../services');
 
 const updateContact = async (req, res, next) => {
   const {contactId} = req.params;
-  const result = await service.updateById(contactId, req.body);
+  const ownerId = req.user._id;
+  const result = await service.updateById(contactId, ownerId, req.body);
   if (!result) {
     const error = createError(404, `Contact with id = ${contactId} not found`);
     throw error;

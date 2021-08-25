@@ -3,8 +3,13 @@ const {contacts: service} = require('../../services');
 
 const updateField = async (req, res, next) => {
   const {contactId} = req.params;
-  const result = await service.updateStatusContact(contactId, req.body);
-  if (!req.body) {
+  const ownerId = req.user._id;
+  const result = await service.updateStatusContact(
+    contactId,
+    ownerId,
+    req.body
+  );
+  if (Object.keys(req.body).length === 0) {
     const error = createError(400, 'missing field favorite');
     throw error;
   }
