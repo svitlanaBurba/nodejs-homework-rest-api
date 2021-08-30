@@ -5,6 +5,8 @@ const api = require('./routes/api');
 const mongoose = require('mongoose');
 require('dotenv').config(); // чтобы из env данные попали в переменные окружения
 
+const path = require('path');
+
 const app = express(); //создание app (наш сервер)
 
 const {DB_HOST, PORT = 3000} = process.env;
@@ -31,6 +33,9 @@ app.use(express.json()); //мидлвара для парсинга из json в
 
 app.use('/api/contacts', api.contacts); //обработчик маршрута contacts
 app.use('/api/users', api.users); //обработчик маршрута users
+
+const usersDir = path.join(process.cwd(), '/public/avatars'); //путь к постоянной папке для сохранения аватара
+app.use('/avatars', express.static(usersDir)); //раздача статики из постоянной папки
 
 app.use((_, res) => {
   res.status(404).send({status: 'error', code: 404, message: 'Not found'});

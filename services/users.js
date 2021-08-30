@@ -6,6 +6,7 @@ const getOne = filter => {
 
 const add = ({password, ...rest}) => {
   const newUser = new User(rest);
+  console.log(newUser);
   newUser.setPassword(password); //пароль сначала хешируем (в Схеме), а потом передаем как свойсво объекта
   return newUser.save();
 }; // добавляем нового пользователя
