@@ -2,7 +2,11 @@ const express = require('express'); // экспортируем экспресс
 const router = express.Router(); //создаем роутер
 
 const {users: ctrl} = require('../../controllers');
-const {validateUser, authentificate} = require('../../middlewares');
+const {
+  validateUser,
+  authentificate,
+  uploadMiddleware
+} = require('../../middlewares');
 const {
   user: {joiSchema, joiSubscriptionSchema}
 } = require('../../models/schemas/');
@@ -17,5 +21,11 @@ router.patch(
   validateUser(joiSubscriptionSchema),
   ctrl.updateSubscription
 ); // роутер для обновления поля subscription
+router.patch(
+  '/avatars',
+  authentificate,
+  uploadMiddleware.single('avatar'),
+  ctrl.uploadUpdateAvatar
+); // роутер для обновления поля avatars
 
 module.exports = router;
