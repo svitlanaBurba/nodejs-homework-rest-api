@@ -26,8 +26,17 @@ const userSchema = Schema(
       type: String,
       default: null
     },
-    avatarURL: String
+    avatarURL: String,
+    verify: {
+      type: Boolean,
+      default: false
+    }, //for e-mail verification
+    verifyToken: {
+      type: String,
+      required: [true, 'Verify token is required']
+    } ////for e-mail verification
   },
+
   {versionKey: false, timestamps: true} //created at/updated at - in collection object
 );
 
