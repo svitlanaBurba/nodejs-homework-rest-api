@@ -30,6 +30,7 @@ const authentificate = async (req, res, next) => {
       });
     }
     req.user = user; //если проверки пройдены, то записываем в реквест пользователя
+
     next(); // передаем обработчик дальше
   } catch (error) {
     console.log('Exception during authorization check -> 401');

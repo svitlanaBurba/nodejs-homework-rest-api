@@ -12,8 +12,13 @@ const {
 } = require('../../models/schemas/');
 
 router.post('/signup', validateUser(joiSchema), ctrl.signup); // роутер для регистрации
+
+router.get('/verify/:verifyToken', ctrl.verify);
+router.post('/verify', ctrl.verifyResend); // на защищенные роуты используем мидлвару authentificate
+
 router.post('/login', validateUser(joiSchema), ctrl.login); // роутер для логина
 router.post('/logout', authentificate, ctrl.logout); // роутер для выхода
+
 router.get('/current', authentificate, ctrl.getCurrentUser); // роутер для выхода
 router.patch(
   '/current',
